@@ -14,7 +14,9 @@ import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.index.query.MatchQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.query.TermQueryBuilder;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.slf4j.Logger;
@@ -100,9 +102,13 @@ public class CallBackController {
         request.indices(index).types(type);
         //各种组合条件
         SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
+
+        //组合条件，或 | 去匹配查询
+        TermQueryBuilder queryBuilder = QueryBuilders.termQuery("name",keyword);
+        MatchQueryBuilder matchQueryBuilder = QueryBuilders.matchQuery("desc",keyword);
+
         sourceBuilder.explain(false).profile(false).from(0).size(10)
-                //.postFilter(QueryBuilders.termQuery("name",keyword))
-                .postFilter(QueryBuilders.wildcardQuery("desc",keyword));
+                .postFilter(queryBuilder).postFilter(matchQueryBuilder);
         request.source(sourceBuilder);
         SearchResponse response = restClient.search(request);
         return Result.success(response);
