@@ -4,6 +4,8 @@ import com.base.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
+import org.elasticsearch.action.bulk.BulkRequest;
+import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.get.GetRequest;
@@ -15,7 +17,8 @@ import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.RestHighLevelClient;
-import org.elasticsearch.index.query.*;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.slf4j.Logger;
@@ -27,12 +30,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
  * @author lizehao
  */
-@Api(value = "CallBackController", description = "回调接口及其他服务调用的接口（前端忽略）")
+@Api(value = "CallBackController", description = "")
 @RestController
 @RequestMapping("/rest/callback")
 public class CallBackController {
@@ -61,6 +65,21 @@ public class CallBackController {
         return Result.success(updateResponse);
     }
 
+    @ApiOperation(value = "批量更新")
+    @RequestMapping(value = "/bulkUpdate", method = RequestMethod.GET)
+    public Result<BulkResponse> bulkUpdate(@RequestParam String index ,@RequestParam String type,@RequestParam List<String> ids,@RequestParam List<String> desc) throws Exception {
+        BulkRequest request = new BulkRequest();
+        for(int i = 0 ; i < ids.size() ;i++){
+            Map<String,Object> source = new HashMap<>();
+            source.put("desc",desc.get(i));
+            UpdateRequest doc = new UpdateRequest(index,type,ids.get(i));
+            doc.doc(source);
+            request.add(doc);
+        }
+        BulkResponse updateResponse = restClient.bulk(request);
+        return Result.success(updateResponse);
+    }
+
     @ApiOperation(value = "新增")
     @RequestMapping(value = "/add", method = RequestMethod.GET)
     public Result<IndexResponse> add(@RequestParam String index , @RequestParam String type, @RequestParam String id, @RequestParam String desc) throws Exception {
@@ -75,19 +94,49 @@ public class CallBackController {
         return Result.success(response);
     }
 
+    @ApiOperation(value = "批量新增")
+    @RequestMapping(value = "/bulkAdd", method = RequestMethod.GET)
+    public Result<BulkResponse> bulkAdd(@RequestParam String index , @RequestParam String type, @RequestParam String id, @RequestParam String desc) throws Exception {
+        BulkRequest bulkRequest = new BulkRequest();
+        for (int i = 0; i <3; i++){
+            Map<String,Object> source = new HashMap<>();
+            source.put("name","遂溪张学友");
+            source.put("age","28");
+            source.put("desc",desc);
+            source.put("birthday","1992-12-11");
+            IndexRequest doc = new IndexRequest(index, type, id);
+            doc.source(source);
+            bulkRequest.add(doc);
+        }
+        BulkResponse response = restClient.bulk(bulkRequest);
+        return Result.success(response);
+    }
+
     @ApiOperation(value = "删除")
     @RequestMapping(value = "/delete", method = RequestMethod.GET)
-    public Result<DeleteResponse> delete(@RequestParam String index , @RequestParam String type, @RequestParam String id, @RequestParam String desc) throws Exception {
+    public Result<DeleteResponse> bulkDelete(@RequestParam String index , @RequestParam String type, @RequestParam String id) throws Exception {
         DeleteRequest request = new DeleteRequest(index,type,id);
         DeleteResponse response = restClient.delete(request);
         return Result.success(response);
     }
 
+    @ApiOperation(value = "批量删除")
+    @RequestMapping(value = "/bulkDelete", method = RequestMethod.GET)
+    public Result<BulkResponse> delete(@RequestParam String index , @RequestParam String type, @RequestParam List<String> ids) throws Exception {
+        BulkRequest bulkRequest = new BulkRequest();
+        for (String id : ids){
+            DeleteRequest doc = new DeleteRequest(index,type, id);
+            bulkRequest.add(doc);
+        }
+        BulkResponse response = restClient.bulk(bulkRequest);
+        return Result.success(response);
+    }
+
     @ApiOperation(value = "列表")
     @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public Result<SearchHits> heighLoad(@RequestParam String index , @RequestParam String type, @RequestParam String id) throws Exception {
-        SearchRequest request = new SearchRequest(index);
-        request.indices();
+    public Result<SearchHits> heighLoad(@RequestParam String index , @RequestParam String type) throws Exception {
+        SearchRequest request = new SearchRequest();
+        request.indices(index).types(type);
         SearchHits response = restClient.search(request).getHits();
         return Result.success(response);
     }
