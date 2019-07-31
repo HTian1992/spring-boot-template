@@ -1,6 +1,6 @@
-package com.controller;
+package com.web.controller;
 
-import com.base.Result;
+import com.bean.es.EsUserVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
@@ -24,10 +24,8 @@ import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import com.web.base.Result;
 
 import java.util.HashMap;
 import java.util.List;
@@ -39,40 +37,50 @@ import java.util.Map;
 @Api(value = "CallBackController", description = "")
 @RestController
 @RequestMapping("/rest/callback")
-public class CallBackController {
+public class EsUserController {
 
-    private static final Logger logger = LoggerFactory.getLogger(CallBackController.class);
+    private static final Logger logger = LoggerFactory.getLogger(EsUserController.class);
+
+    private static String index = "test2";
+
+    private static String type = "d1";
 
     @Autowired
     private RestHighLevelClient restClient;
 
     @ApiOperation(value = "查询")
     @RequestMapping(value = "/load", method = RequestMethod.GET)
-    public Result<Map<String, Object>> load(@RequestParam String index ,@RequestParam String type,@RequestParam String id) throws Exception {
+    public Result<Map<String, Object>> load(@RequestParam String id) throws Exception {
         GetRequest request = new GetRequest(index,type,id);
         GetResponse response = restClient.get(request);
         return Result.success(response.getSource());
     }
 
     @ApiOperation(value = "更新")
-    @RequestMapping(value = "/update", method = RequestMethod.GET)
-    public Result<UpdateResponse> update(@RequestParam String index ,@RequestParam String type,@RequestParam String id,@RequestParam String desc) throws Exception {
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    public Result<UpdateResponse> update(@RequestBody EsUserVO vo) throws Exception {
         Map<String,Object> doc = new HashMap<>();
-        doc.put("desc",desc);
-        UpdateRequest request = new UpdateRequest(index,type,id);
+        doc.put("name",vo.getName());
+        doc.put("birthday",vo.getBirthday());
+        doc.put("desc",vo.getDesc());
+        doc.put("age",vo.getAge());
+        UpdateRequest request = new UpdateRequest(index,type,vo.getId());
         request.doc(doc);
         UpdateResponse updateResponse = restClient.update(request);
         return Result.success(updateResponse);
     }
 
     @ApiOperation(value = "批量更新")
-    @RequestMapping(value = "/bulkUpdate", method = RequestMethod.GET)
-    public Result<BulkResponse> bulkUpdate(@RequestParam String index ,@RequestParam String type,@RequestParam List<String> ids,@RequestParam List<String> desc) throws Exception {
+    @RequestMapping(value = "/bulkUpdate", method = RequestMethod.POST)
+    public Result<BulkResponse> bulkUpdate(@RequestBody List<EsUserVO> list) throws Exception {
         BulkRequest request = new BulkRequest();
-        for(int i = 0 ; i < ids.size() ;i++){
+        for(int i = 0 ; i < list.size() ;i++){
             Map<String,Object> source = new HashMap<>();
-            source.put("desc",desc.get(i));
-            UpdateRequest doc = new UpdateRequest(index,type,ids.get(i));
+            source.put("name",list.get(i).getName());
+            source.put("birthday",list.get(i).getBirthday());
+            source.put("desc",list.get(i).getDesc());
+            source.put("age",list.get(i).getAge());
+            UpdateRequest doc = new UpdateRequest(index,type,list.get(i).getId());
             doc.doc(source);
             request.add(doc);
         }
@@ -81,30 +89,30 @@ public class CallBackController {
     }
 
     @ApiOperation(value = "新增")
-    @RequestMapping(value = "/add", method = RequestMethod.GET)
-    public Result<IndexResponse> add(@RequestParam String index , @RequestParam String type, @RequestParam String id, @RequestParam String desc) throws Exception {
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    public Result<IndexResponse> add(@RequestBody EsUserVO vo) throws Exception {
         Map<String,Object> doc = new HashMap<>();
-        doc.put("name","遂溪张学友");
-        doc.put("age","28");
-        doc.put("desc",desc);
-        doc.put("birthday","1992-12-11");
-        IndexRequest request = new IndexRequest(index, type, id);
+        doc.put("name",vo.getName());
+        doc.put("birthday",vo.getBirthday());
+        doc.put("desc",vo.getDesc());
+        doc.put("age",vo.getAge());
+        IndexRequest request = new IndexRequest(index, type);
         request.source(doc);
         IndexResponse response = restClient.index(request);
         return Result.success(response);
     }
 
     @ApiOperation(value = "批量新增")
-    @RequestMapping(value = "/bulkAdd", method = RequestMethod.GET)
-    public Result<BulkResponse> bulkAdd(@RequestParam String index , @RequestParam String type, @RequestParam String id, @RequestParam String desc) throws Exception {
+    @RequestMapping(value = "/bulkAdd", method = RequestMethod.POST)
+    public Result<BulkResponse> bulkAdd(@RequestBody List<EsUserVO> list) throws Exception {
         BulkRequest bulkRequest = new BulkRequest();
-        for (int i = 0; i <3; i++){
+        for (int i = 0; i <list.size(); i++){
             Map<String,Object> source = new HashMap<>();
-            source.put("name","遂溪张学友");
-            source.put("age","28");
-            source.put("desc",desc);
-            source.put("birthday","1992-12-11");
-            IndexRequest doc = new IndexRequest(index, type, id);
+            source.put("name",list.get(i).getName());
+            source.put("birthday",list.get(i).getBirthday());
+            source.put("desc",list.get(i).getDesc());
+            source.put("age",list.get(i).getAge());;
+            IndexRequest doc = new IndexRequest(index, type);
             doc.source(source);
             bulkRequest.add(doc);
         }
@@ -114,7 +122,7 @@ public class CallBackController {
 
     @ApiOperation(value = "删除")
     @RequestMapping(value = "/delete", method = RequestMethod.GET)
-    public Result<DeleteResponse> bulkDelete(@RequestParam String index , @RequestParam String type, @RequestParam String id) throws Exception {
+    public Result<DeleteResponse> bulkDelete(@RequestParam String id) throws Exception {
         DeleteRequest request = new DeleteRequest(index,type,id);
         DeleteResponse response = restClient.delete(request);
         return Result.success(response);
@@ -122,7 +130,7 @@ public class CallBackController {
 
     @ApiOperation(value = "批量删除")
     @RequestMapping(value = "/bulkDelete", method = RequestMethod.GET)
-    public Result<BulkResponse> delete(@RequestParam String index , @RequestParam String type, @RequestParam List<String> ids) throws Exception {
+    public Result<BulkResponse> delete(@RequestParam List<String> ids) throws Exception {
         BulkRequest bulkRequest = new BulkRequest();
         for (String id : ids){
             DeleteRequest doc = new DeleteRequest(index,type, id);
@@ -134,16 +142,16 @@ public class CallBackController {
 
     @ApiOperation(value = "列表")
     @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public Result<SearchHits> heighLoad(@RequestParam String index , @RequestParam String type) throws Exception {
-        SearchRequest request = new SearchRequest();
-        request.indices(index).types(type);
+    public Result<SearchHits> heighLoad() throws Exception {
+        SearchRequest request = new SearchRequest(index);
         SearchHits response = restClient.search(request).getHits();
         return Result.success(response);
     }
 
     @ApiOperation(value = "关键字搜索")
     @RequestMapping(value = "/keyword", method = RequestMethod.GET)
-    public Result<SearchResponse> keyword(@RequestParam("index") String index, @RequestParam("type") String type, @RequestParam(value = "name",required = false) String name,@RequestParam(value = "keyword" , required = false) String keyword) throws Exception {
+    public Result<SearchResponse> keyword(@RequestParam(value = "name",required = false) String name,
+                                          @RequestParam(value = "keyword" , required = false) String keyword) throws Exception {
 
         SearchRequest request = new SearchRequest();
         //索引

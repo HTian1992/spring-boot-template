@@ -1,4 +1,4 @@
-package com.base;
+package com.web.base;
 
 import io.swagger.annotations.ApiModelProperty;
 

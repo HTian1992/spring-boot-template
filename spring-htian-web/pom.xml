@@ -12,6 +12,12 @@
     <artifactId>spring-htian-web</artifactId>
 
     <dependencies>
+        <dependency>
+            <groupId>com</groupId>
+            <artifactId>spring-htian-bean</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
         <!-- elasticsearch -->
         <dependency>
             <groupId>org.elasticsearch.client</groupId>

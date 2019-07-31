@@ -1,4 +1,4 @@
-package com;
+package com.es;
 
 public class init {
 }

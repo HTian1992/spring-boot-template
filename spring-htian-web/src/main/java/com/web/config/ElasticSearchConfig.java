@@ -1,4 +1,4 @@
-package com.config;
+package com.web.config;
 
 import org.apache.http.HttpHost;
 import org.elasticsearch.client.RestClient;
