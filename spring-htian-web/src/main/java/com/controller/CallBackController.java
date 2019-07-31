@@ -3,6 +3,7 @@ package com.controller;
 import com.base.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.get.GetRequest;
@@ -14,9 +15,7 @@ import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.RestHighLevelClient;
-import org.elasticsearch.index.query.MatchQueryBuilder;
-import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.index.query.TermQueryBuilder;
+import org.elasticsearch.index.query.*;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.slf4j.Logger;
@@ -95,7 +94,7 @@ public class CallBackController {
 
     @ApiOperation(value = "关键字搜索")
     @RequestMapping(value = "/keyword", method = RequestMethod.GET)
-    public Result<SearchResponse> keyword(@RequestParam String index, @RequestParam String type, @RequestParam String keyword) throws Exception {
+    public Result<SearchResponse> keyword(@RequestParam("index") String index, @RequestParam("type") String type, @RequestParam(value = "name",required = false) String name,@RequestParam(value = "keyword" , required = false) String keyword) throws Exception {
 
         SearchRequest request = new SearchRequest();
         //索引
@@ -104,11 +103,19 @@ public class CallBackController {
         SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
 
         //组合条件，或 | 去匹配查询
-        TermQueryBuilder queryBuilder = QueryBuilders.termQuery("name",keyword);
-        MatchQueryBuilder matchQueryBuilder = QueryBuilders.matchQuery("desc",keyword);
-
+        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+        if(StringUtils.isNotEmpty(name)){
+            boolQueryBuilder.should(QueryBuilders.termQuery("name",name));
+        }
+        if(StringUtils.isNotEmpty(keyword)){
+            boolQueryBuilder.should(QueryBuilders.matchQuery("desc",keyword));
+        }
         sourceBuilder.explain(false).profile(false).from(0).size(10)
-                .postFilter(queryBuilder).postFilter(matchQueryBuilder);
+                .postFilter(boolQueryBuilder);
+
+//        RangeQueryBuilder rangeQueryBuilder = QueryBuilders.rangeQuery("birthday").gte("1998-12-11");
+//        boolQueryBuilder.must(rangeQueryBuilder);
+//        QueryBuilders.boostingQuery(queryBuilder,matchQueryBuilder)
         request.source(sourceBuilder);
         SearchResponse response = restClient.search(request);
         return Result.success(response);
