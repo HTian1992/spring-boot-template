@@ -2,6 +2,7 @@ package com.client.wechat;
 
 import com.bean.wechat.AccessTokenDTO;
 import com.bean.wechat.TemplateMessageParam;
+import com.bean.wechat.WechatRestDTO;
 import com.client.config.FeignConfig;
 import com.constants.Constants;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -20,5 +21,5 @@ public interface WechatFeighApi {
     AccessTokenDTO getConfig(@RequestParam("grant_type") String grant_type,@RequestParam("appid") String appid,@RequestParam("secret") String secret);
 
     @PostMapping(value = "/cgi-bin/message/template/send")
-    String sendMessage(@RequestBody TemplateMessageParam param,@RequestParam("access_token") String access_token);
+    WechatRestDTO sendMessage(@RequestBody TemplateMessageParam param, @RequestParam("access_token") String access_token);
 }
