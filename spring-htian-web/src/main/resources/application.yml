@@ -5,6 +5,5 @@ server:
 
 logging:
   config: classpath:log4j2-${config.profile:dev}.xml
-
-#  level:
-#    com.bestwehotel.b2c.client.*: debug
+  level:
+    com.client.*: debug
