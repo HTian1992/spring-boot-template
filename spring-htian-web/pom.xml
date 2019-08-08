@@ -17,7 +17,11 @@
             <artifactId>spring-htian-bean</artifactId>
             <version>1.0.0</version>
         </dependency>
-
+        <dependency>
+            <groupId>com</groupId>
+            <artifactId>spring-htian-common</artifactId>
+            <version>1.0.0</version>
+        </dependency>
         <!-- elasticsearch -->
         <dependency>
             <groupId>org.elasticsearch.client</groupId>
@@ -31,4 +35,24 @@
             <version>6.2.0</version>
         </dependency>
     </dependencies>
+
+    <build>
+        <finalName>${project.artifactId}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>com.web.Application</mainClass>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>

@@ -1,7 +1,10 @@
 server:
   port: 80
+  servlet:
+    context-path: /blogs-web
 
 logging:
   config: classpath:log4j2-${config.profile:dev}.xml
+
 #  level:
 #    com.bestwehotel.b2c.client.*: debug

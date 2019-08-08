@@ -31,7 +31,7 @@ public class WebLogAspect {
 
     private static final Logger log = LoggerFactory.getLogger(WebLogAspect.class);
 
-    @Pointcut("execution(public * com.controller..*.*(..))")
+    @Pointcut("execution(public * com.web.controller..*.*(..))")
     public void webLog(){}
 
     @Around("webLog()")
