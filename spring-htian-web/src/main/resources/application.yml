@@ -1,2 +1,7 @@
 server:
-  port: 8088
+  port: 80
+
+logging:
+  config: classpath:log4j2-${config.profile:dev}.xml
+#  level:
+#    com.bestwehotel.b2c.client.*: debug
