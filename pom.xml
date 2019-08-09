@@ -9,7 +9,7 @@
     <packaging>pom</packaging>
     <version>1.0.0</version>
     <modules>
-        <module>spirng-htian-dao</module>
+        <module>spring-htian-dao</module>
         <module>spring-htian-es</module>
         <module>spring-htian-web</module>
         <module>spring-htian-bean</module>

@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.ComponentScan;
 
-@ComponentScan(basePackages = "com.web.*")
+@ComponentScan(basePackages = "com.*")
 @SpringBootApplication
 @EnableFeignClients({"com.client.*"})
 public class Application {

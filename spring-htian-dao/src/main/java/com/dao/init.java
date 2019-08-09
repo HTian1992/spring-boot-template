@@ -1,4 +1,4 @@
-package com.web;
+package com.dao;
 
 public class init {
 }

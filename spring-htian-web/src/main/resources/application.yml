@@ -7,3 +7,19 @@ logging:
   config: classpath:log4j2-${config.profile:dev}.xml
   level:
     com.client.*: debug
+wx:
+  appid: wxe6d6c1586ff078ba
+  secret: d10630d9b358ddefd103a6db782b876f
+jdbc:
+  driverClassName: com.mysql.cj.jdbc.Driver
+  url: jdbc:mysql://127.0.0.1:3306/blog_web?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&serverTimezone=Hongkong&useSSL=false
+  username: root
+  password: Aa123456
+#spring:
+#  datasource:
+#    type: com.alibaba.druid.pool.DruidDataSource
+#    url: jdbc:mysql://127.0.0.1:3306/blog_web?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&serverTimezone=Hongkong&useSSL=false
+#    username: root
+#    password: 123456
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    filters: stat,wall,log4j

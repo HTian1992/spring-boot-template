@@ -27,6 +27,18 @@
             <artifactId>spring-htian-service</artifactId>
             <version>1.0.0</version>
         </dependency>
+        <dependency>
+            <groupId>com</groupId>
+            <artifactId>spring-htian-dao</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <!-- jdbc -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>6.0.6</version>
+        </dependency>
         <!-- elasticsearch -->
         <dependency>
             <groupId>org.elasticsearch.client</groupId>
