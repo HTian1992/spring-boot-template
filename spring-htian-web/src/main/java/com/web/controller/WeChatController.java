@@ -39,9 +39,7 @@ public class WeChatController {
 
     private final static String token = "blogs";
 
-    private static String accessToken = null;
-
-    private static long expiresInTime = 0;
+    private static AccessTokenDTO accessToken = new AccessTokenDTO();
 
     @Autowired
     private WechatFeighApi wechatFeighApi;
@@ -49,20 +47,7 @@ public class WeChatController {
     @ApiOperation(value = "获取授权access_token")
     @RequestMapping(value = "/getAccessToken", method = RequestMethod.GET)
     public Result<AccessTokenDTO> getAccessToken() {
-        AccessTokenDTO accessTokenRes;
-        if(expiresInTime == 0 || expiresInTime <= (System.currentTimeMillis() /1000)){
-            accessTokenRes = wechatFeighApi.getConfig("client_credential",wxAppid,wxSecret);
-            if(null!=accessTokenRes){
-                accessToken = accessTokenRes.getAccess_token();
-                expiresInTime = (System.currentTimeMillis() / 1000) + accessTokenRes.getExpires_in();
-            }
-            accessTokenRes.setAbout("已刷新");
-        } else {
-            accessTokenRes = new AccessTokenDTO();
-            accessTokenRes.setAccess_token(accessToken);
-            accessTokenRes.setExpires_in(expiresInTime - (System.currentTimeMillis() /1000));
-            accessTokenRes.setAbout("未失效");
-        }
+        AccessTokenDTO accessTokenRes = getAcceessToken();
         return Result.success(accessTokenRes);
     }
 
@@ -77,7 +62,7 @@ public class WeChatController {
         data.put("arrivedTime",new TemplateParam("2019年8月8日\r\n","#173177"));
         data.put("remark",new TemplateParam("欢迎再次预定！\r\n","#173177"));
         param.setData(data);
-        WechatRestDTO result = wechatFeighApi.sendMessage(param,accessToken);
+        WechatRestDTO result = wechatFeighApi.sendMessage(param,getAcceessToken().getAccess_token());
         if(0 == result.getErrcode()){
             return Result.success(result.getMsgid());
         }
@@ -115,5 +100,17 @@ public class WeChatController {
         }
     }
 
-
+    private AccessTokenDTO getAcceessToken(){
+        try {
+            if(accessToken.getAccess_token() == null || accessToken.getSign_time() <= (System.currentTimeMillis() /1000)){
+                accessToken = wechatFeighApi.getConfig("client_credential",wxAppid,wxSecret);
+                accessToken.setSign_time((System.currentTimeMillis() / 1000) + accessToken.getExpires_in());
+            }else {
+                accessToken.setExpires_in((accessToken.getSign_time() - (System.currentTimeMillis() /1000)));
+            }
+        }catch (Exception e){
+            logger.error("授权获取access_token失败，异常-{}",e);
+        }
+        return accessToken;
+    }
 }

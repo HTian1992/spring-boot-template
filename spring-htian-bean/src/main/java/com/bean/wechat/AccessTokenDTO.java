@@ -9,5 +9,5 @@ public class AccessTokenDTO {
 
     private Long expires_in;
 
-    private String about;
+    private Long sign_time;
 }
