@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.mapper.BCommentMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.dao.entity.BComment">
+        <id column="id" property="id" />
+        <result column="blog_id" property="blogId" />
+        <result column="user_id" property="userId" />
+        <result column="ref_user_id" property="refUserId" />
+        <result column="content" property="content" />
+        <result column="create_date" property="createDate" />
+        <result column="offset" property="offset" />
+        <result column="is_root" property="isRoot" />
+        <result column="flag_id" property="flagId" />
+        <result column="username" property="username" />
+        <result column="ref_username" property="refUsername" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, blog_id, user_id, ref_user_id, content, create_date, offset, is_root, flag_id, username, ref_username
+    </sql>
+
+</mapper>

@@ -27,11 +27,7 @@
             <artifactId>spring-htian-service</artifactId>
             <version>1.0.0</version>
         </dependency>
-        <dependency>
-            <groupId>com</groupId>
-            <artifactId>spring-htian-dao</artifactId>
-            <version>1.0.0</version>
-        </dependency>
+
 
         <!-- jdbc -->
         <dependency>
