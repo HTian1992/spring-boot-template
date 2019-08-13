@@ -12,10 +12,7 @@ import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -25,22 +22,20 @@ import java.util.stream.Collectors;
  */
 @Api(value = "LogController", description = "")
 @RestController
-@RequestMapping("/rest/log")
-public class LogController {
+@RequestMapping("/rest/comment")
+public class CommentController {
 
-    private static final Logger logger = LoggerFactory.getLogger(LogController.class);
+    private static final Logger logger = LoggerFactory.getLogger(CommentController.class);
 
-    @Autowired
-    private BLogMapper bLogMapper;
     @Autowired
     private BCommentMapper commentMapper;
 
 
-    @ApiOperation(value = "")
-    @RequestMapping(value = "/selectOne", method = RequestMethod.GET)
-    public Result<BLog> selectOne(@RequestParam Long key) {
-        BLog a = bLogMapper.selectOne(new QueryWrapper<BLog>().eq("id",key));
-        return Result.success(a);
+    @ApiOperation(value = "新增评论")
+    @RequestMapping(value = "/insert", method = RequestMethod.GET)
+    public Result<BLog> selectOne(@RequestBody BComment record) {
+        int flag = commentMapper.insert(record);
+        return flag == 1 ? Result.success(): Result.error();
     }
 
     @ApiOperation(value = "查询文章评论")
