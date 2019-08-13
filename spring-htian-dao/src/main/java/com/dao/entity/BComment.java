@@ -14,7 +14,7 @@ import io.swagger.annotations.ApiModelProperty;
  * </p>
  *
  * @author lizehao
- * @since 2019-08-12
+ * @since 2019-08-13
  */
 @ApiModel(value="BComment对象", description="")
 public class BComment extends Model<BComment> {
@@ -24,25 +24,33 @@ public class BComment extends Model<BComment> {
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
+    @ApiModelProperty(value = "文章主键id")
     private Long blogId;
 
+    @ApiModelProperty(value = "用户主键id")
     private Long userId;
 
+    @ApiModelProperty(value = "被评论方id")
     private Integer refUserId;
 
+    @ApiModelProperty(value = "内容")
     private String content;
 
     private LocalDateTime createDate;
 
+    @ApiModelProperty(value = "偏移量，用于排序")
     private Integer offset;
 
+    @ApiModelProperty(value = "是否为第一次评论")
     private Integer isRoot;
 
-    @ApiModelProperty(value = "标记ID，用于识别为哪个评论/回复")
+    @ApiModelProperty(value = "标记ID（楼层），用于识别为哪个评论/回复，第一次评论，取最末楼层+1为新评论楼层")
     private Integer flagId;
 
+    @ApiModelProperty(value = "评论方名称")
     private String username;
 
+    @ApiModelProperty(value = "被评论方名称")
     private String refUsername;
 
 
