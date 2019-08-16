@@ -14,7 +14,7 @@ import io.swagger.annotations.ApiModelProperty;
  * </p>
  *
  * @author lizehao
- * @since 2019-08-13
+ * @since 2019-08-16
  */
 @ApiModel(value="BBlog对象", description="")
 public class BBlog extends Model<BBlog> {
@@ -52,13 +52,13 @@ public class BBlog extends Model<BBlog> {
     private Integer isOpen;
 
     @ApiModelProperty(value = "字数")
-    private Integer count;
+    private Integer wordCount;
 
     @ApiModelProperty(value = "阅读量")
-    private Integer read;
+    private Integer watched;
 
     @ApiModelProperty(value = "喜欢（人数）")
-    private Integer like;
+    private Integer liked;
 
 
     public Long getId() {
@@ -149,28 +149,28 @@ public class BBlog extends Model<BBlog> {
         this.isOpen = isOpen;
     }
 
-    public Integer getCount() {
-        return count;
+    public Integer getWordCount() {
+        return wordCount;
     }
 
-    public void setCount(Integer count) {
-        this.count = count;
+    public void setWordCount(Integer wordCount) {
+        this.wordCount = wordCount;
     }
 
-    public Integer getRead() {
-        return read;
+    public Integer getWatched() {
+        return watched;
     }
 
-    public void setRead(Integer read) {
-        this.read = read;
+    public void setWatched(Integer watched) {
+        this.watched = watched;
     }
 
-    public Integer getLike() {
-        return like;
+    public Integer getLiked() {
+        return liked;
     }
 
-    public void setLike(Integer like) {
-        this.like = like;
+    public void setLiked(Integer liked) {
+        this.liked = liked;
     }
 
     @Override
@@ -192,9 +192,9 @@ public class BBlog extends Model<BBlog> {
         ", blogType=" + blogType +
         ", status=" + status +
         ", isOpen=" + isOpen +
-        ", count=" + count +
-        ", read=" + read +
-        ", like=" + like +
+        ", wordCount=" + wordCount +
+        ", watched=" + watched +
+        ", liked=" + liked +
         "}";
     }
 }

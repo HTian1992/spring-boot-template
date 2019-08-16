@@ -33,9 +33,9 @@ public class BlogsController {
     }
 
     @ApiOperation(value = "查询文章评论")
-    @RequestMapping(value = "/getCommentList", method = RequestMethod.GET)
-    public Result<BBlog> getCommentList(@RequestParam Long blogId) {
-        BBlog result = bBlogMapper.selectOne(new QueryWrapper<BBlog>().eq("blog_id",blogId));
+    @RequestMapping(value = "/load", method = RequestMethod.GET)
+    public Result<BBlog> getBlog(@RequestParam Long blogId) {
+        BBlog result = bBlogMapper.selectOne(new QueryWrapper<BBlog>().eq("id",blogId));
         return Result.success(result);
     }
 

@@ -15,14 +15,14 @@
         <result column="blog_type" property="blogType" />
         <result column="status" property="status" />
         <result column="is_open" property="isOpen" />
-        <result column="count" property="count" />
-        <result column="read" property="read" />
-        <result column="like" property="like" />
+        <result column="word_count" property="wordCount" />
+        <result column="watched" property="watched" />
+        <result column="liked" property="liked" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, content, create_date, update_date, user_id, author_name, title, outline, blog_type, status, is_open, count, read, like
+        id, content, create_date, update_date, user_id, author_name, title, outline, blog_type, status, is_open, word_count, watched, liked
     </sql>
 
 </mapper>
