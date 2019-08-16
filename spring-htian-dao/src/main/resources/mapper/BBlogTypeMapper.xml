@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.mapper.BBlogTypeMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.dao.entity.BBlogType">
+        <id column="id" property="id" />
+        <result column="blog_type" property="blogType" />
+        <result column="type_name" property="typeName" />
+        <result column="type_desc" property="typeDesc" />
+        <result column="create_date" property="createDate" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, blog_type, type_name, type_desc, create_date
+    </sql>
+
+</mapper>

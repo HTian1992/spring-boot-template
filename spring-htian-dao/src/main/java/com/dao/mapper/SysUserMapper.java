@@ -1,6 +1,6 @@
 package com.dao.mapper;
 
-import com.dao.entity.BLog;
+import com.dao.entity.SysUser;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
@@ -11,6 +11,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @author lizehao
  * @since 2019-08-13
  */
-public interface BLogMapper extends BaseMapper<BLog> {
+public interface SysUserMapper extends BaseMapper<SysUser> {
 
 }

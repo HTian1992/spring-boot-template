@@ -44,7 +44,7 @@ public class BComment extends Model<BComment> {
     @ApiModelProperty(value = "是否为第一次评论")
     private Integer isRoot;
 
-    @ApiModelProperty(value = "标记ID（楼层），用于识别为哪个评论/回复，第一次评论，取最末楼层+1为新评论楼层")
+    @ApiModelProperty(value = "标记ID，用于识别为哪个评论/回复")
     private Integer flagId;
 
     @ApiModelProperty(value = "评论方名称")
