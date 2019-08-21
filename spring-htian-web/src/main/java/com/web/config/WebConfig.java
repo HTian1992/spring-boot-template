@@ -25,4 +25,12 @@ public class WebConfig extends WebMvcConfigurationSupport {
                 .maxAge(3600)
                 .allowCredentials(true);
     }
+
+    @Override
+    protected void addResourceHandlers(ResourceHandlerRegistry registry) {
+        //swagger2
+        registry.addResourceHandler("/swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");
+        registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
+        super.addResourceHandlers(registry);
+    }
 }
